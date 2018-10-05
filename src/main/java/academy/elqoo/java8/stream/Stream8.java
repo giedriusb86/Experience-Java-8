@@ -4,10 +4,12 @@ package academy.elqoo.java8.stream;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.util.function.Predicate.isEqual;
+import static java.util.stream.Collectors.*;
 
 public class Stream8 {
 
@@ -100,45 +102,45 @@ public class Stream8 {
 
     public static Map<Boolean, List<User>> partionUsersByGender(List<User> users) {
         return users.stream()
-                .collect(Collectors.partitioningBy(User::isMale));
+                .collect(partitioningBy(User::isMale));
     }
 
     public static Map<Integer, List<User>> groupByAge(List<User> users) {
         return users.stream()
-                .collect(Collectors.groupingBy(User::getAge));
+                .collect(groupingBy(User::getAge));
     }
 
     public static Map<Boolean, Map<Integer, List<User>>> groupByGenderAndAge(List<User> users) {
         return users.stream()
-                .collect(Collectors.partitioningBy(User::isMale, Collectors.groupingBy(User::getAge)));
+                .collect(partitioningBy(User::isMale, groupingBy(User::getAge)));
     }
 
     public static Map<Boolean, Long> countGender(List<User> users) {
-        throw new NotImplementedException();
+        return users.stream().collect(partitioningBy(User::isMale, counting()));
     }
 
     public static boolean anyMatch(List<User> users, int age) {
-        throw new NotImplementedException();
+        return users.stream().map(User::getAge).anyMatch(isEqual(age));
     }
 
     public static boolean noneMatch(List<User> users, int age) {
-        throw new NotImplementedException();
+        return users.stream().map(User::getAge).noneMatch(isEqual(age));
     }
 
     public static Optional<User> findAny(List<User> users, String name) {
-        throw new NotImplementedException();
+        return users.stream().filter(user -> name.equals(user.getName())).findAny();
     }
 
     public static List<User> sortByAge(List<User> users) {
-        throw new NotImplementedException();
+        return users.stream().sorted(Comparator.comparingInt(User::getAge)).collect(toList());
     }
 
     public static Stream<Integer> getBoxedStream(IntStream stream) {
-        throw new NotImplementedException();
+        return stream.boxed();
     }
 
     public static List<Integer> generateFirst10PrimeNumbers() {
-        throw new NotImplementedException();
+        return IntStream.iterate(2, i -> i + 1).filter(Stream8::isPrime).limit(10).boxed().collect(toList());
     }
 
     public static boolean isPrime(int number) {
@@ -146,19 +148,20 @@ public class Stream8 {
     }
 
     public static List<Integer> generate10RandomNumbers() {
-        throw new NotImplementedException();
+        return IntStream.generate(() -> new Random().nextInt()).limit(10).boxed().collect(toList());
     }
 
     public static User findOldest(List<User> users) {
-        throw new NotImplementedException();
+        return users.stream().max(Comparator.comparingInt(User::getAge)).orElse(null);
     }
 
     public static int sumAge(List<User> users) {
-        throw new NotImplementedException();
+//        return users.stream().map(User::getAge).reduce(0, (r, i) -> r + i);
+        return users.stream().mapToInt(User::getAge).sum();
     }
 
     public static IntSummaryStatistics ageSummaryStatistics(List<User> users) {
-        throw new NotImplementedException();
+        return users.stream().collect(Collectors.summarizingInt(User::getAge));
     }
 
 }

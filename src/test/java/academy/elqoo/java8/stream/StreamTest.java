@@ -238,7 +238,7 @@ public class StreamTest {
 
     @Test
     public void shouldBeEmptyStream(){
-        Stream<Integer> numberStream =null; //create empty stream
+        Stream<Integer> numberStream =Stream.empty(); //create empty stream
         assertNotNull(numberStream);
     }
 
