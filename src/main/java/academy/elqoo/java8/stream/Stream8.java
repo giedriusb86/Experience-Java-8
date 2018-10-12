@@ -21,7 +21,9 @@ public class Stream8 {
     }
 
     public static List<Integer> getAgeFromUsers(List<User> user) {
-        throw new NotImplementedException();
+        return user.stream()
+                .map(User::getAge)
+                .collect(Collectors.toList());
     }
 
     public static List<Integer> getDistinctAges(List<User> users) {
