@@ -11,35 +11,35 @@ import static org.junit.Assert.assertThat;
 public class OptionalTest {
 
     @Test
-    public void shouldCreateEmptyOptional(){
-        Optional<String> optional = null; // create empty optional
-        assertThat(optional.isPresent(),equalTo(false));
+    public void shouldCreateEmptyOptional() {
+        Optional<String> optional = Optional.empty(); // create empty optional
+        assertThat(optional.isPresent(), equalTo(false));
     }
 
     @Test
-    public void shouldReturnBookName(){
+    public void shouldReturnBookName() {
         Optional<Book> book = Optional8.getBook();
-        String bookName = null; // book. ....
-        assertThat(bookName,equalTo("Experience Java 8"));
+        String bookName = book.map(Book::getName).orElse(""); // book. ....
+        assertThat(bookName, equalTo("Experience Java 8"));
     }
 
     @Test
-    public void shouldReturnBookAuthor(){
+    public void shouldReturnBookAuthor() {
         Optional<Book> book = Optional8.getBookWithAuthor();
-        String authorName = null; // book. ....
-        assertThat(authorName,equalTo("Stijn De Mulder"));
+        String authorName = book.flatMap(Book::getAuthor).orElseThrow(NullPointerException::new); // book. ....
+        assertThat(authorName, equalTo("Stijn De Mulder"));
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldThrowNoElementException(){
+    public void shouldThrowNoElementException() {
         Optional<Book> book = Optional8.getBook();
-        book.get().getAuthor();
+        book.get().getAuthor().get();
     }
 
     @Test(expected = MyCustomException.class)
-    public void shouldThrowOptionalEmptyException(){
+    public void shouldThrowOptionalEmptyException() throws MyCustomException {
         Optional<Book> book = Optional8.getBook();
-        book.get().getAuthor(); // getAuthor.or.....
+        book.get().getAuthor().orElseThrow(MyCustomException::new); // getAuthor.or.....
     }
 
 }

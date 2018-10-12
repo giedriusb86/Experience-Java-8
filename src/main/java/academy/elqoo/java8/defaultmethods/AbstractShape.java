@@ -26,8 +26,4 @@ public class AbstractShape implements Shape {
         this.yPos = yPos;
     }
 
-    @Override
-    public String getName() {
-        return "Abstract Shape";
-    }
 }
